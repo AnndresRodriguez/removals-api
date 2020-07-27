@@ -5,6 +5,7 @@ import cityService from './city.service';
 import countryService from './country.service';
 
 import { response } from '../libs/tools';
+import { sendMail } from '../libs/mail';
 
 class QuotationService {
   async getAllQuotations() {
@@ -40,7 +41,9 @@ class QuotationService {
       .of(id)
       .add(idService);
 
-    })
+    });
+
+    sendMail(quotation.mail, quotation.name);
 
     response.operation = true;
     response.message = `Cotizacion para el usuario ${name_user} creada con éxito`;
