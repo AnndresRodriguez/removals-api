@@ -3,12 +3,11 @@ import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTab
 import { ServiceEntity } from "./service.entity";
 import { Country } from "./country.entity";
 
+
 @Entity("quotation")
 export class Quotation extends BaseEntity {
   @PrimaryGeneratedColumn("increment")
   id: number;
-  @Column({ type: "integer" })
-  id_service: number;
 
   @OneToOne((type) => Country)
   @JoinColumn({ name: "origin" })
@@ -31,12 +30,12 @@ export class Quotation extends BaseEntity {
   @Column({type: 'integer', default: 0})
   status: number;
 
-  @ManyToMany((type) => ServiceEntity)
+  @ManyToMany((type) => ServiceEntity, { cascade: true })
   @JoinTable({ name: "quotation_service" })
   services: ServiceEntity[];
 
-  @Column({ type: "datetime", name: "created_at" })
-  createdAt: Date;
-  @Column({ type: "datetime", name: "updated_at" })
-  updatedAt: Date;
+  @Column({type: 'datetime', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date
+    @Column({type: 'datetime', name: 'updated_at', nullable: true })
+    updatedAt: Date
 }

@@ -48,8 +48,9 @@ export default class Server {
     
     this.app.use(routes.indexController);
     this.app.use("/user", routes.userController);
-    this.app.use("/request", routes.quotationContoller);
+    this.app.use("/quotation", routes.quotationContoller);
     this.app.use("/service", routes.serviceController);
+    this.app.use("/country", routes.countryController);
     this.app.use(express.static("public"));
   }
 

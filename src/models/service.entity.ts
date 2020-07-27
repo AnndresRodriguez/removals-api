@@ -1,4 +1,5 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Quotation } from './quotation.entity';
 
 @Entity('service')
 export class ServiceEntity extends BaseEntity{
@@ -11,8 +12,11 @@ export class ServiceEntity extends BaseEntity{
     @Column({type: 'integer', default: 1})
     status: number;
 
-    @Column({type: 'datetime', name: 'created_at' })
+    @Column({type: 'datetime', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date
-    @Column({type: 'datetime', name: 'updated_at' })
+    @Column({type: 'datetime', name: 'updated_at', nullable: true })
     updatedAt: Date
+
+    @ManyToMany(type => Quotation, quotation => quotation.services)
+    quotations: Quotation[];
 }

@@ -11,9 +11,9 @@ export class City extends BaseEntity{
     @Column({type: 'integer', default: 1})
     status: number;
 
-    @Column({type: 'datetime', name: 'created_at' })
+    @Column({type: 'datetime', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date
-    @Column({type: 'datetime', name: 'updated_at' })
+    @Column({type: 'datetime', name: 'updated_at', nullable: true })
     updatedAt: Date
 
 

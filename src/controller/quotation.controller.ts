@@ -1,5 +1,7 @@
 import { Router, Request, Response } from "express";
 import { QuotationService } from '../services';
+import { IQuotation } from '../models/interfaces/IQuotation';
+import quotationService from "../services/quotation.service";
 
 class QuotationController {
   router: Router;
@@ -22,6 +24,15 @@ class QuotationController {
   }
 
   async createQuotation(req: Request, res: Response) {
+
+    console.log(req.body);
+
+    const quotation: IQuotation = req.body;
+
+     const { operation, data, message } = await quotationService.createQuotation(quotation); 
+     operation
+     ? res.status(200).json({ operation, message, data })
+     : res.status(202).json({ operation, message });
     
   }
 

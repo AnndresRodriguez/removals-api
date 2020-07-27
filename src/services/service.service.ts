@@ -3,6 +3,8 @@ import { ServiceEntity } from '../models/service.entity';
 import { response } from '../libs/tools';
 import fp from 'lodash/fp'
 
+
+
 class Service {
 
     
@@ -22,10 +24,8 @@ class Service {
         if(isValidName){
             const serviceRepository = getRepository(ServiceEntity);
             const newService = serviceRepository.create({ name: fp.capitalize(fp.toLower(nameService)) })
-            newService.status = 1
-            newService.createdAt = new Date();
-            newService.updatedAt = new Date();
             const serviceCreated = await newService.save();
+
             response.operation = true;
             response.message = `Servicio ${fp.capitalize(fp.toLower(nameService))} Creado exitósamente`;
             const { id, name } = serviceCreated
@@ -78,6 +78,7 @@ class Service {
         if (serviceToUpdate != undefined){
      
             serviceToUpdate.status == 0 ? serviceToUpdate.status = 1 : serviceToUpdate.status = 0;
+            serviceToUpdate.updatedAt = new Date();
             const { id, name, status } = await serviceToUpdate.save();
             response.operation = true;
             response.message = `El servicio ${name} ha actualizado el estado con éxito`;
@@ -95,11 +96,8 @@ class Service {
 
         const serviceRepository = getRepository(ServiceEntity);
         const service = await serviceRepository.find({ where: { name: fp.capitalize(fp.toLower(nameService)) } });
-        
         return service.length === 0;
     }
-
-
 
 }
 

@@ -17,9 +17,9 @@ export class Country extends BaseEntity{
     @JoinColumn()
     city: City;
 
-    @Column({type: 'datetime', name: 'created_at' })
+    @Column({type: 'datetime', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date
-    @Column({type: 'datetime', name: 'updated_at' })
+    @Column({type: 'datetime', name: 'updated_at', nullable: true })
     updatedAt: Date
 
 
