@@ -33,7 +33,7 @@ class ContactController {
     }
     else{ 
       const newContact: IContact = req.body;
-      const { data, message, operation } = await contactService.createContact(newContact);
+      const { operation, data, message } = await contactService.createContact(newContact);
       operation
         ? res.status(200).json({ operation, message, data })
         : res.status(202).json({ operation, message });

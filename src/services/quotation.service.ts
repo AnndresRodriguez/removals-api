@@ -7,6 +7,7 @@ import countryService from "./country.service";
 
 import { response } from '../libs/tools';
 import { sendMail } from "../libs/mail";
+import { HttpResponse } from '../libs/httpResponse';
 
 class QuotationService {
   async getAllQuotations() {
@@ -17,6 +18,7 @@ class QuotationService {
 
   async createQuotation(quotation: IQuotation) {
 
+    const httpResponse = new HttpResponse();
     const quotationRepository = getRepository(Quotation);
     const newQuotation = quotationRepository.create({
       name_user: quotation.name,
@@ -26,30 +28,14 @@ class QuotationService {
     });
 
     const cityOrigin = await cityService.createCity(quotation.origin[1]);
-    const countryOrigin = await countryService.createCountry(
-      quotation.origin[0],
-      cityOrigin
-    );
-    const cityDestination = await cityService.createCity(
-      quotation.destination[1]
-    );
-    const countryDestination = await countryService.createCountry(
-      quotation.destination[0],
-      cityDestination
-    );
+    const countryOrigin = await countryService.createCountry(quotation.origin[0], cityOrigin);
+    const cityDestination = await cityService.createCity(quotation.destination[1]);
+    const countryDestination = await countryService.createCountry(quotation.destination[0],cityDestination);
 
     newQuotation.origin = countryOrigin;
     newQuotation.destination = countryDestination;
 
-    const {
-      name_user,
-      mail_user,
-      description,
-      phone_user,
-      origin,
-      destination,
-      id,
-    } = await newQuotation.save();
+    const {name_user, mail_user, description, phone_user, origin, destination, id} = await newQuotation.save();
 
     quotation.services.map(async (idService) => {
       await getConnection()
@@ -59,24 +45,15 @@ class QuotationService {
         .add(idService);
     });
 
-    sendMail(quotation.mail, quotation.name);
+    // sendMail(quotation.mail, quotation.name);
 
-    response.operation = true;
-    response.message = `Quotation for client ${name_user} created successfully`;
-    response.data = {
-      name_user,
-      mail_user,
-      description,
-      phone_user,
-      origin,
-      destination,
-    };
-
-    return response;
+    httpResponse.create('Quotation', { name_user, mail_user, description, phone_user, origin, destination} )
+    return httpResponse;
   }
 
   async updateStatusQuotation(idQuotation: number) {
 
+    const httpResponse = new HttpResponse();
     if(!_.isNaN(idQuotation)){
       const quotationRepository = getRepository(Quotation);
       const quotationToUpdate = await quotationRepository.findOne(idQuotation);
@@ -84,42 +61,36 @@ class QuotationService {
         quotationToUpdate.status = quotationToUpdate.status == 0 ? quotationToUpdate.status = 1 : quotationToUpdate.status = 0;
         quotationToUpdate.updatedAt = new Date();
         const { id, status } =  await quotationToUpdate.save(); 
-        response.operation = true;
-        response.message = 'Update quotation status succesfully';
-        response.data = { id, status };
-        return response;
+        httpResponse.create('Quotation', { id, status });
+        return httpResponse;
       }
-  
-      response.message = `No Quotation was found with the id ${idQuotation} to update`;
-      return response;
+      httpResponse.errorNotFoundID('Quotation',idQuotation);
+      return httpResponse;
     }
-
-    response.message = `ID received { id: ${ idQuotation } }  is not number valid, check if is not empty or another type (string, null, undefined) etc`;
-    return response;
+    httpResponse.errorFormatInvalid(idQuotation);
+    return httpResponse;
 
   }
 
   async getQuotationByID(idQuotation: number){
 
+    const httpResponse = new HttpResponse();
     if(!_.isNaN(idQuotation)){
 
       const quotationRepository = getRepository(Quotation);
       const quotation = await quotationRepository.findOne(idQuotation);
       if(quotation !== undefined){
-
         const { id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt } = quotation;
-        response.operation = true;
-        response.data = { id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt };
-        return response;
-        
+        httpResponse.findOne({ id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt });
+        return httpResponse;
       }
 
-      response.message = `Quotation with ID ${idQuotation} was not found`;
-      return response;
+      httpResponse.errorNotFoundID('Quotation', idQuotation);
+      return httpResponse;
     }
 
-    response.message = `ID received { id: ${ idQuotation } }  is not number valid, check if is not empty or another type (string, null, undefined) etc`;
-    return response;
+    httpResponse.errorFormatInvalid(idQuotation);
+      return httpResponse;
 
   }
 }

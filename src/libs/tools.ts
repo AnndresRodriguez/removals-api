@@ -8,6 +8,8 @@ export function removeBlanks(stringToFormat: string) {
 }
 
 export function checkEmptyFields( objectToValidate: object ){
+
+  console.log(Object.values(objectToValidate).some(key => (key !== null && key === '' || key === undefined || key === NaN)))
   return Object.values(objectToValidate).some(key => (key !== null && key === '' || key === undefined || key === NaN));
 }
 

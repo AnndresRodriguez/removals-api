@@ -31,8 +31,10 @@ class QuotationController {
 
     const { isValidRequest, dataRequest, information } = validateRequest(req.body);
 
-    if(isValidRequest){
-      res.status(202).json({ dataRequest, information });
+    console.log(information);
+
+    if(!isValidRequest){
+      res.status(202).json({ information, dataRequest });
     }
     else {
       const quotation: IQuotation = req.body;
@@ -44,8 +46,6 @@ class QuotationController {
   }
 
   async updateStatusQuotation(req: Request, res: Response) {
-
-    
 
     const { operation, data, message } = await quotationService.updateStatusQuotation(parseInt(req.params.id));
     operation

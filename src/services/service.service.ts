@@ -28,8 +28,8 @@ class Service {
 
             response.operation = true;
             response.message = `Service ${fp.capitalize(fp.toLower(nameService))} created successfully`;
-            const { id, name } = serviceCreated
-            response.data = { id, name }
+            const { id, name } = serviceCreated;
+            response.data = { id, name };
             return response;
         }
 

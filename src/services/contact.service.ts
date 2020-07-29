@@ -2,8 +2,8 @@
 import { getRepository } from 'typeorm';
 import { Contact } from '../models/contact.entity';
 import { IContact } from '../models/interfaces/IContact';
-import { response } from '../libs/tools';
 import _ from 'lodash';
+import { HttpResponse } from '../libs/httpResponse';
 
 class ContactService {
 
@@ -20,18 +20,17 @@ class ContactService {
 
     const contactRepository = getRepository(Contact);
     const newContact = contactRepository.create(contact);
-    const { id, name, mail, affair, message, status } = await newContact.save();
-    response.operation = true;
-    response.message = `Contact request for client ${ contact.name } was created successfully`;
-    response.data = { id, name, mail, affair, message, status };
-    return response;
+    const httpResponse = new HttpResponse();
+    const contactCreated = await newContact.save();
+    httpResponse.create('Contact', contactCreated);
+    return httpResponse;
     
   }
 
   async updateContact(idContact: number){
-
+    
+    const httpResponse = new HttpResponse();
     if(!_.isNaN(idContact)){
-
       const contactRepository = getRepository(Contact);
       const contactToUpdate = await contactRepository.findOne(idContact);
       if( contactToUpdate !== undefined ){
@@ -39,38 +38,35 @@ class ContactService {
           contactToUpdate.status = contactToUpdate.status == 0 ? contactToUpdate.status = 1 : contactToUpdate.status = 0;
           contactToUpdate.updatedAt = new Date();
           const { id, name, mail, affair, message, status }  = await contactToUpdate.save();
-          response.operation = true;
-          response.message = `Status Contact update successfully`;
-          response.data = { id, name, mail, affair, message, status };
-          return response;
+          httpResponse.update('Contact', { id, name, mail, affair, message, status });
+          return httpResponse;
       }
   
-      response.message = `No Contact was found with the id ${idContact} to update`;
-      return response;
+      httpResponse.errorNotFoundID('Contact', idContact);
+      return httpResponse;
     }
 
-    response.message = `ID received { id: ${ idContact } }  is not number valid, check if is not empty o type string`;
-    return response;
+    httpResponse.errorFormatInvalid(idContact);
+    return httpResponse;
 
   }
 
   async getContactByID( idContact: number ){
 
+    const httpResponse = new HttpResponse();
     if(!_.isNaN(idContact)){
       const contactRepository = getRepository(Contact);
       const contactToUpdate = await contactRepository.findOne(idContact);
       if(contactToUpdate !== undefined){
-          
           const { id, name, mail, affair, message, status, createdAt } = contactToUpdate;
-          response.operation = true;
-          response.data = { id, name, mail, affair, message, status, createdAt };
-          return response;
+          httpResponse.findOne({ id, name, mail, affair, message, status, createdAt })
+          return httpResponse;
       }
-      response.message = `No Contact was found with the id ${idContact}`;
-      return response;
+      httpResponse.errorNotFoundID('Contact', idContact);
+      return httpResponse;
     }
-    response.message = `ID received { id: ${ idContact } }  is not number valid, check if is not empty o type string`;
-    return response;
+    httpResponse.errorFormatInvalid(idContact);
+    return httpResponse;
   }
 
 }
