@@ -2,7 +2,7 @@ import { getRepository, getManager } from 'typeorm';
 import { ServiceEntity } from '../models/service.entity';
 import { response } from '../libs/tools';
 import fp from 'lodash/fp'
-
+import _ from 'lodash'
 
 
 class Service {
@@ -27,67 +27,89 @@ class Service {
             const serviceCreated = await newService.save();
 
             response.operation = true;
-            response.message = `Servicio ${fp.capitalize(fp.toLower(nameService))} Creado exitósamente`;
+            response.message = `Service ${fp.capitalize(fp.toLower(nameService))} created successfully`;
             const { id, name } = serviceCreated
             response.data = { id, name }
             return response;
         }
 
         response.operation = false;
-        response.message = 'El nombre ingresado ya se encuentra registrado';
+        response.message = 'The name entered is already registered';
         return response;
-
-
     }
 
-    async updateService( id:number, newName: string ){
+    async updateService( idService:number, newName: string ){
 
-        const serviceRepository = getRepository(ServiceEntity);
-        const serviceToUpdate = await serviceRepository.findOne(id);
-        if (serviceToUpdate != undefined){
-
-            const isNameValid = await this.validateNameService(newName);
-
-            if(isNameValid)
-            {
-                serviceToUpdate.name = fp.capitalize(fp.toLower(newName));
-                serviceToUpdate.updatedAt = new Date();
-                const { id, name } = await serviceToUpdate.save();
-                response.operation = true;
-                response.message = `Servicio ${fp.capitalize(fp.toLower(newName))} actualizado exitósamente`;
-                response.data = { id, name };
-                return response;
-            }
-            
-            else {
-
-               response.message = `El nombre ${ newName } ya se encuentra registrado debe seleccionar otro`;
-               return response;
-            }
+        if (_.isEmpty(newName)){
+            response.message = `New name is empty`;
+            return response;
         }
 
-        response.message = `El servicio con el id ${ id } no existe`;
+        if (!_.isNaN(idService) && !_.isEmpty(newName)){
+
+            const serviceRepository = getRepository(ServiceEntity);
+            const serviceToUpdate = await serviceRepository.findOne(idService);
+            if (serviceToUpdate != undefined){
+    
+                const isNameValid = await this.validateNameService(newName);
+    
+                if(isNameValid)
+                {
+                    serviceToUpdate.name = fp.capitalize(fp.toLower(newName));
+                    serviceToUpdate.updatedAt = new Date();
+                    const { id, name } = await serviceToUpdate.save();
+                    response.operation = true;
+                    response.message = `Service ${fp.capitalize(fp.toLower(newName))} updated successfully`;
+                    response.data = { id, name };
+                    return response;
+                }
+                
+                else {
+    
+                   response.message = `The name ${ newName } is already registered you must select another`;
+                   return response;
+                }
+            }
+    
+            response.message = `Service with ID ${ idService } was not found`;
+            return response;
+
+        
+        } else if(_.isNaN(idService)){
+
+            response.message = `ID received ${ idService } is not number valid`
+            return response;
+        }
+
+        response.message = 'The name received to create a new service is empty';
         return response;
+
 
     }
 
     async updateStatusService( id: number ){
 
-        const serviceRepository = getRepository(ServiceEntity);
-        const serviceToUpdate = await serviceRepository.findOne(id); 
-        if (serviceToUpdate != undefined){
-     
-            serviceToUpdate.status == 0 ? serviceToUpdate.status = 1 : serviceToUpdate.status = 0;
-            serviceToUpdate.updatedAt = new Date();
-            const { id, name, status } = await serviceToUpdate.save();
-            response.operation = true;
-            response.message = `El servicio ${name} ha actualizado el estado con éxito`;
-            response.data = { id, name, status };
-            return response;
+        if(_.isNumber(id)){
 
+            const serviceRepository = getRepository(ServiceEntity);
+            const serviceToUpdate = await serviceRepository.findOne(id); 
+            if (serviceToUpdate != undefined){
+         
+                serviceToUpdate.status == 0 ? serviceToUpdate.status = 1 : serviceToUpdate.status = 0;
+                serviceToUpdate.updatedAt = new Date();
+                const { id, name, status } = await serviceToUpdate.save();
+                response.operation = true;
+                response.message = `Update status service succesfully`;
+                response.data = { id, name, status };
+                return response;
+    
+            }
+    
+            response.message = `Service with ID ${ id } was not found`;
+            return response;
         }
 
-        response.message = `El servicio con el ID ${id} no se encuentra en la base de datos`;
+        response.message = `ID received { id: ${ id } }  is not number valid, check if is not empty or another type (string, null, undefined) etc`;
         return response;
 
     }

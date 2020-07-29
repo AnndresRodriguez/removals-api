@@ -11,9 +11,8 @@ class ServiceController {
   }
 
   async getAllServices(req: Request, res: Response) {
-    res.json({
-      data: "dashboard user",
-    });
+    const allServices = await service.getAllServices();
+    res.json(allServices);
   }
 
   async getService(req: Request, res: Response) {}
@@ -33,8 +32,6 @@ class ServiceController {
     operation
       ? res.status(200).json({ operation, message, data })
       : res.status(202).json({ operation, message });
-
-
   }
 
   async updateStatus(req: Request, res: Response) {
