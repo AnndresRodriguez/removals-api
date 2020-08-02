@@ -4,16 +4,18 @@ import { IQuotation } from "../models/interfaces/IQuotation";
 import _ from 'lodash';
 import cityService from "./city.service";
 import countryService from "./country.service";
-
-import { response } from '../libs/tools';
 import { sendMail } from "../libs/mail";
 import { HttpResponse } from '../libs/httpResponse';
 
 class QuotationService {
   async getAllQuotations() {
-    const quotationRepository = getRepository(Quotation);
-    const quotations = quotationRepository.find();
-    return quotations;
+    const quotations = await getRepository(Quotation)
+    .createQueryBuilder("quotation")
+    .innerJoinAndSelect("quotation.services", "service")
+    .getMany();
+
+    return quotations;    
+
   }
 
   async createQuotation(quotation: IQuotation) {
@@ -45,7 +47,7 @@ class QuotationService {
         .add(idService);
     });
 
-    // sendMail(quotation.mail, quotation.name);
+    sendMail(quotation.mail, quotation.name);
 
     httpResponse.create('Quotation', { name_user, mail_user, description, phone_user, origin, destination} )
     return httpResponse;
@@ -90,7 +92,7 @@ class QuotationService {
     }
 
     httpResponse.errorFormatInvalid(idQuotation);
-      return httpResponse;
+    return httpResponse;
 
   }
 }

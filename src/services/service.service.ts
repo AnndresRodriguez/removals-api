@@ -1,8 +1,8 @@
 import { getRepository, getManager } from 'typeorm';
 import { ServiceEntity } from '../models/service.entity';
-import { response } from '../libs/tools';
-import fp from 'lodash/fp'
-import _ from 'lodash'
+import fp from 'lodash/fp';
+import _ from 'lodash';
+import { HttpResponse } from '../libs/httpResponse';
 
 
 class Service {
@@ -19,98 +19,77 @@ class Service {
     async createService(nameService: string){
 
         const isValidName = await this.validateNameService(nameService);
-        console.log(fp.startCase(fp.toLower(nameService)))
-
+        const httpResponse = new HttpResponse();
+  
         if(isValidName){
             const serviceRepository = getRepository(ServiceEntity);
             const newService = serviceRepository.create({ name: fp.capitalize(fp.toLower(nameService)) })
             const serviceCreated = await newService.save();
-
-            response.operation = true;
-            response.message = `Service ${fp.capitalize(fp.toLower(nameService))} created successfully`;
-            const { id, name } = serviceCreated;
-            response.data = { id, name };
-            return response;
+            const { id, name } = serviceCreated;;
+            httpResponse.create('Service', { id, name })
+            return httpResponse;
         }
 
-        response.operation = false;
-        response.message = 'The name entered is already registered';
-        return response;
+        httpResponse.errorDuplicated();
+        return httpResponse;
     }
 
     async updateService( idService:number, newName: string ){
 
-        if (_.isEmpty(newName)){
-            response.message = `New name is empty`;
-            return response;
-        }
+        const httpResponse = new HttpResponse();
 
-        if (!_.isNaN(idService) && !_.isEmpty(newName)){
+        if (!_.isNaN(idService)){
 
             const serviceRepository = getRepository(ServiceEntity);
             const serviceToUpdate = await serviceRepository.findOne(idService);
             if (serviceToUpdate != undefined){
-    
                 const isNameValid = await this.validateNameService(newName);
-    
                 if(isNameValid)
                 {
                     serviceToUpdate.name = fp.capitalize(fp.toLower(newName));
                     serviceToUpdate.updatedAt = new Date();
                     const { id, name } = await serviceToUpdate.save();
-                    response.operation = true;
-                    response.message = `Service ${fp.capitalize(fp.toLower(newName))} updated successfully`;
-                    response.data = { id, name };
-                    return response;
+                    httpResponse.update('Service', { id, name });
+                    return httpResponse;
                 }
                 
                 else {
     
-                   response.message = `The name ${ newName } is already registered you must select another`;
-                   return response;
+                   httpResponse.errorDuplicated()
+                   return httpResponse;
                 }
             }
-    
-            response.message = `Service with ID ${ idService } was not found`;
-            return response;
+            httpResponse.errorNotFoundID('Service', idService)
+            return httpResponse;
+        } 
 
-        
-        } else if(_.isNaN(idService)){
-
-            response.message = `ID received ${ idService } is not number valid`
-            return response;
-        }
-
-        response.message = 'The name received to create a new service is empty';
-        return response;
-
-
+        httpResponse.errorFormatInvalid(idService);
+        return httpResponse;
     }
 
     async updateStatusService( id: number ){
 
-        if(_.isNumber(id)){
+        const httpResponse = new HttpResponse();
 
+        if(!_.isNaN(id)){
+            
             const serviceRepository = getRepository(ServiceEntity);
-            const serviceToUpdate = await serviceRepository.findOne(id); 
+            const serviceToUpdate = await serviceRepository.findOne(id);
+
             if (serviceToUpdate != undefined){
-         
                 serviceToUpdate.status == 0 ? serviceToUpdate.status = 1 : serviceToUpdate.status = 0;
                 serviceToUpdate.updatedAt = new Date();
                 const { id, name, status } = await serviceToUpdate.save();
-                response.operation = true;
-                response.message = `Update status service succesfully`;
-                response.data = { id, name, status };
-                return response;
-    
+                httpResponse.update('Service', { id, name, status });
+                return httpResponse;
             }
     
-            response.message = `Service with ID ${ id } was not found`;
-            return response;
+            httpResponse.errorNotFoundID('Service', id)
+            return httpResponse;
         }
 
-        response.message = `ID received { id: ${ id } }  is not number valid, check if is not empty or another type (string, null, undefined) etc`;
-        return response;
+        httpResponse.errorFormatInvalid(id);
+        return httpResponse;
 
     }
 

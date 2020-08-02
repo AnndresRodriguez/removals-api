@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import service from "../services/service.service";
 // import { ServiceService } from '../services';
+import { validateRequest } from '../libs/tools';
 
 class ServiceController {
   router: Router;
@@ -18,23 +19,37 @@ class ServiceController {
   async getService(req: Request, res: Response) {}
 
   async createService(req: Request, res: Response) {
-    const { operation, message, data } = await service.createService(
-      req.body.name
-    );
-    operation
-      ? res.status(200).json({ operation, message, data })
-      : res.status(202).json({ operation, message });
+
+    const { isValidRequest, dataRequest, information } = validateRequest(req.body);
+
+    if(!isValidRequest){
+      res.status(202).json({information, dataRequest});
+    }else {
+      const { operation, message, data } = await service.createService(req.body.name);
+      operation
+        ? res.status(200).json({ operation, message, data })
+        : res.status(202).json({ operation, message });
+    }
+
   }
 
   async updateService(req: Request, res: Response) {
 
-    const { operation, message, data } = await service.updateService(parseInt(req.body.id), req.body.name);
-    operation
-      ? res.status(200).json({ operation, message, data })
-      : res.status(202).json({ operation, message });
+    const { isValidRequest, dataRequest, information } = validateRequest(req.body);
+
+    if(!isValidRequest){
+      res.status(202).json({information, dataRequest});
+    }else {
+      const { operation, message, data } = await service.updateService(parseInt(req.body.id), req.body.name);
+      operation
+        ? res.status(200).json({ operation, message, data })
+        : res.status(202).json({ operation, message });
+    }
+
   }
 
   async updateStatus(req: Request, res: Response) {
+
      const { operation, message, data } =  await service.updateStatusService(parseInt(req.params.id));
      operation
       ? res.status(200).json({ operation, message, data })

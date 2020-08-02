@@ -7,10 +7,15 @@ export function removeBlanks(stringToFormat: string) {
   return stringToFormat.replace(/ /g, "");
 }
 
-export function checkEmptyFields( objectToValidate: object ){
 
-  console.log(Object.values(objectToValidate).some(key => (key !== null && key === '' || key === undefined || key === NaN)))
-  return Object.values(objectToValidate).some(key => (key !== null && key === '' || key === undefined || key === NaN));
+export function emptyProperties(objectToValidate: object){
+   return Object.values(objectToValidate).some(key => {
+      if(key !== null && key === '' || key === undefined || key === NaN){
+         return true;
+      }else if( _.isObject(key)){
+         return _.isEmpty(key)
+      }
+   })
 }
 
 export function validateRequest(request: object){
@@ -23,7 +28,7 @@ export function validateRequest(request: object){
       requestData.dataRequest = request;
       return requestData;
       
-   }else if (checkEmptyFields(request)){
+   }else if (emptyProperties(request)){
       requestData.information = 'Some field in the request is empty';
       requestData.dataRequest = request;
       return requestData;

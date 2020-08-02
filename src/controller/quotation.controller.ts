@@ -3,7 +3,7 @@ import { QuotationService } from "../services";
 import _ from "lodash";
 import { IQuotation } from "../models/interfaces/IQuotation";
 import quotationService from "../services/quotation.service";
-import { validateRequest } from '../libs/tools';
+import { validateRequest, emptyProperties } from '../libs/tools';
 
 class QuotationController {
   router: Router;
@@ -21,17 +21,14 @@ class QuotationController {
   async getQuotation(req: Request, res: Response) {
 
     const { operation, data, message } = await quotationService.getQuotationByID(parseInt(req.params.id));
-
-
+    operation
+        ? res.status(200).json({ operation, message, data })
+        : res.status(202).json({ operation, message });
   }
 
-  
-
   async createQuotation(req: Request, res: Response) {
-
+    
     const { isValidRequest, dataRequest, information } = validateRequest(req.body);
-
-    console.log(information);
 
     if(!isValidRequest){
       res.status(202).json({ information, dataRequest });
@@ -53,6 +50,8 @@ class QuotationController {
         : res.status(202).json({ operation, message });
 
   }
+
+  
   
   // async updateQuotation(req: Request, res: Response) {}
 

@@ -1,7 +1,5 @@
 import { Request, Response, Router } from 'express';
 import countryService from '../services/country.service';
-
-
 class CountryController {
 
    router: Router;
