@@ -38,4 +38,11 @@ export class Quotation extends BaseEntity {
     createdAt: Date
     @Column({type: 'datetime', name: 'updated_at', nullable: true })
     updatedAt: Date
+
+   static findQuotationByID(id: number){
+      return this.createQueryBuilder("quotation")
+      .innerJoinAndSelect("quotation.services", "service")
+      .where("quotation.id = :id", { id })
+      .getOne();
+   }
 }

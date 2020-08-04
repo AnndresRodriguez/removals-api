@@ -79,11 +79,7 @@ class QuotationService {
     const httpResponse = new HttpResponse();
     if(!_.isNaN(idQuotation)){
 
-      const quotation = await getRepository(Quotation)
-      .createQueryBuilder("quotation")
-      .innerJoinAndSelect("quotation.services", "service")
-      .where("quotation.id = :id", { id: idQuotation })
-      .getOne();
+      const quotation = await Quotation.findQuotationByID(idQuotation);
 
       if(quotation !== undefined){
         const { id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt } = quotation;
