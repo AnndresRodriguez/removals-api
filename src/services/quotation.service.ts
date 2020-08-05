@@ -47,7 +47,7 @@ class QuotationService {
         .add(idService);
     });
 
-    sendMail(quotation.mail, quotation.name);
+    // sendMail(quotation.mail, quotation.name);
 
     httpResponse.create('Quotation', { name_user, mail_user, description, phone_user, origin, destination} )
     return httpResponse;
