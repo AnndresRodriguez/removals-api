@@ -9,6 +9,7 @@ import fileupload from "express-fileupload";
 import useragent from "express-useragent";
 import routes from "./controller";
 
+
 export default class Server {
   public app: express.Application;
   public port: number;

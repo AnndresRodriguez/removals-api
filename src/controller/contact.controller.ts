@@ -3,6 +3,7 @@ import { IContact } from "../models/interfaces/IContact";
 import contactService from "../services/contact.service";
 import _ from "lodash";
 import { validateRequest } from '../libs/tools';
+import multer from '../libs/multer';
 
 class ContactController {
   router: Router;
@@ -54,6 +55,7 @@ class ContactController {
     this.router.get("/", this.getAllContacts);
     this.router.get("/:id", this.getContactById);
     this.router.post("/", this.createContact);
+    this.router.post("upload",  multer.single('document'));
     this.router.put("/:id", this.updateStatusContact);
     // this.router.put("/", this.updateContact);
     // this.router.delete("/:id", this.deleteContact);
