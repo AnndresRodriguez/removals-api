@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
+
+import { getTemplateMailUser } from '../libs/templates/mailclient'
 
 const transporter = nodemailer.createTransport({
     
@@ -18,7 +20,7 @@ export function sendMail( to: string | Array<string>, nameClient: string ){
         { from: 'trasteosduranapp@gmail.com', 
           to, 
           subject: 'Solicitud de Servicio Trasteos Durán',
-          text: `Buen día ${nameClient} hemos recibido su solicitud realizada por medio de nuestro portal, en un plazo de 24 horas nos comunicaremos con usted, muchas Gracias por confiar en nuestros servicios`
+          html: getTemplateMailUser(nameClient)
         } 
         , function(error, info){
         if (error) {
