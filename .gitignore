@@ -3,6 +3,7 @@ node_modules
 /src/migrations
 /dist
 ormconfig.json
+logs.txt
 /removal-api
 # local env files
 .env.local

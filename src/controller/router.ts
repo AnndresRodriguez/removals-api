@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import fs from 'fs';
 
 class IndexRouter {
 
@@ -11,7 +12,19 @@ class IndexRouter {
 
     routes(){
         this.router.get('/', (req: Request, res: Response) => {
-            res.send('duran:api /users')
+            res.send('duran:api /quotations')
+        })
+
+
+        this.router.get('*', (req: Request, res: Response) => {
+            try {
+                fs.writeFileSync('../../logs.txt', `${ req.originalUrl + req.ip + req.method } `)
+                // console.log(fs.readFileSync("../../logs.txt", "utf8"));
+            } catch (error) {
+                console.log(error)
+            }
+
+            res.send('route is invalid')
         })
     }
 
