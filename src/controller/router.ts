@@ -19,7 +19,7 @@ class IndexRouter {
         this.router.get('/*', (req: Request, res: Response) => {
             try {
 
-                fs.appendFileSync('logs.txt', `\n ${req.originalUrl} : IP  ${req.ip} : method ${req.method}`);
+                fs.appendFileSync('logs.txt', `\n ${req.originalUrl} : IP  ${req.ip} : method ${req.method} useragent ${req.get('user-agent')} `);
 
             } catch (error) {
                 console.log(error)
