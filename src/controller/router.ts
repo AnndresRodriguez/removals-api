@@ -16,10 +16,11 @@ class IndexRouter {
         })
 
 
-        this.router.get('*', (req: Request, res: Response) => {
+        this.router.get('/*', (req: Request, res: Response) => {
             try {
-                fs.writeFileSync('../../logs.txt', `${ req.originalUrl + req.ip + req.method } `)
-                // console.log(fs.readFileSync("../../logs.txt", "utf8"));
+
+                fs.appendFileSync('logs.txt', `\n ${req.originalUrl} : IP  ${req.ip} : method ${req.method}`);
+
             } catch (error) {
                 console.log(error)
             }
