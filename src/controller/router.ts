@@ -16,17 +16,17 @@ class IndexRouter {
         })
 
 
-        this.router.get('/*', (req: Request, res: Response) => {
-            try {
+        // this.router.get('/*', (req: Request, res: Response) => {
+        //     try {
 
-                fs.appendFileSync('logs.txt', `\n ${req.originalUrl} : IP  ${req.ip} : method ${req.method} useragent ${req.get('user-agent')} `);
+        //         fs.appendFileSync('logs.txt', `\n ${req.originalUrl} : IP  ${req.ip} : method ${req.method} useragent ${req.get('user-agent')} `);
 
-            } catch (error) {
-                console.log(error)
-            }
+        //     } catch (error) {
+        //         console.log(error)
+        //     }
 
-            res.send('route is invalid')
-        })
+        //     res.send('route is invalid')
+        // })
     }
 
 }
