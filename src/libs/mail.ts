@@ -5,8 +5,10 @@ dotenv.config();
 import { getTemplateMailUser } from '../libs/templates/mailclient'
 
 const transporter = nodemailer.createTransport({
-    
+
     service: process.env.SERVICE_MAIL,
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.USER_MAIL,
         pass: process.env.PASSWORD_USER_MAIL,
