@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 export function sendMail( to: string | Array<string>, nameClient: string ){
 
     transporter.sendMail( 
-        { from: 'trasteosduranapp@gmail.com', 
+        { from: process.env.USER_MAIL, 
           to, 
           subject: 'Solicitud de Servicio Trasteos Durán',
           html: getTemplateMailUser(nameClient)
