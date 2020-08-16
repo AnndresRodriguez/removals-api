@@ -184,6 +184,7 @@ export function getTemplateMailUser(nameUser: string){
                 h3,
                 h4,
                 h5,
+                p,
                 h6 {
                     font-family: 'Lato', 'Roboto', 'Trebuchet MS', sans-serif;
                     color: #000000;

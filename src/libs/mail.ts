@@ -6,7 +6,8 @@ import { getTemplateMailUser } from '../libs/templates/mailclient'
 
 const transporter = nodemailer.createTransport({
 
-    service: process.env.SERVICE_MAIL,
+    service: 'Yandex',
+    host: 'smtp.yandex.ru',
     port: 465,
     secure: true,
     auth: {
