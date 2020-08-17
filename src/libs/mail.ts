@@ -29,7 +29,7 @@ export function sendMail( to: string | Array<string>, nameClient: string ){
         if (error) {
           console.log(error);
         } else {
-          console.log('Email sent: ' + info.response);
+          console.log('Email enviado a: ' + info.response);
         }
       });
 
