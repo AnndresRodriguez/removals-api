@@ -20,5 +20,4 @@ export class ServiceEntity extends BaseEntity{
     @ManyToMany(type => Quotation, quotation => quotation.services)
     quotations: Quotation[];
 
-    
 }
