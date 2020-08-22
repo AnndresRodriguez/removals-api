@@ -17,6 +17,11 @@ class CountryController {
       
    }
 
+   async deleteCountry(req: Request, res: Response){
+
+
+   }
+
    routes() {
     this.router.get("/", this.getAllCountries);
 
@@ -24,7 +29,7 @@ class CountryController {
     // this.router.post("/", this.createCountry);
     // this.router.put("/", this.updateCountry);
     // this.router.put("/:id", this.updateStatusCountry);
-    // this.router.delete("/:id", this.deleteCountry);
+   this.router.delete("/:id", this.deleteCountry);
   }
 
 }
