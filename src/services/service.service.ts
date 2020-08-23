@@ -100,6 +100,25 @@ class Service {
         return service.length === 0;
     }
 
+    async deleteService( id: number ){
+
+        const httpResponse = new HttpResponse();
+
+        if(!_.isNaN(id)){
+            
+            const serviceRepository = getRepository(ServiceEntity);
+            const servicetoDelete = await serviceRepository.findOne(id);
+    
+            httpResponse.errorNotFoundID('Service', id)
+            return httpResponse;
+        }
+
+        httpResponse.errorFormatInvalid(id);
+        return httpResponse;
+
+
+    }
+
 }
 
 const service = new Service();

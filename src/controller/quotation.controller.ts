@@ -51,11 +51,9 @@ class QuotationController {
 
   }
 
-  
-  
-  // async updateQuotation(req: Request, res: Response) {}
+   async updateQuotation(req: Request, res: Response) {}
 
-  // async deleteQuotation(req: Request, res: Response) {}
+   async deleteQuotation(req: Request, res: Response) {}
 
   routes() {
     this.router.get("/", this.getAllQuotations);
