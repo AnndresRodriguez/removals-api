@@ -2,6 +2,9 @@
 import { Country } from "../models/country.entity";
 import { getRepository } from 'typeorm';
 import { City } from '../models/city.entity';
+import fp from 'lodash/fp';
+import _ from 'lodash';
+import { HttpResponse } from '../libs/httpResponse';
 
 class CountryService {
 
@@ -20,6 +23,24 @@ class CountryService {
     const newCountry = CountryRepository.create({ name });
     newCountry.city = city;
     return await newCountry.save();
+    
+  }
+
+  async deleteCountry(id: number) {
+
+    const httpResponse = new HttpResponse();
+
+        if(!_.isNaN(id)){
+            
+            const countryRepository = getRepository(Country);
+            const countrytoDelete = await countryRepository.findOne(id);
+    
+            httpResponse.errorNotFoundID('Service', id)
+            return httpResponse;
+        }
+
+        httpResponse.errorFormatInvalid(id);
+        return httpResponse;
     
   }
 
