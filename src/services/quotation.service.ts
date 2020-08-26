@@ -83,12 +83,27 @@ class QuotationService {
 
       if(quotation !== undefined){
         const { id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt } = quotation;
+        console.log(origin);
+        console.log(destination);
         httpResponse.findOne({ id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt });
         return httpResponse;
       }
 
       httpResponse.errorNotFoundID('Quotation', idQuotation);
       return httpResponse;
+    }
+
+    httpResponse.errorFormatInvalid(idQuotation);
+    return httpResponse;
+
+  }
+
+  async deleteQuotation(idQuotation: number){
+
+    const httpResponse = new HttpResponse();
+
+    if(!_.isNaN(idQuotation)){
+      const quotationRepository = getRepository(Quotation);
     }
 
     httpResponse.errorFormatInvalid(idQuotation);
