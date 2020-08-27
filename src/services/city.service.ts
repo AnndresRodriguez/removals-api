@@ -26,7 +26,10 @@ class CityService {
             
             const cityRepository = getRepository(City);
             const cityToDisable = await cityRepository.findOne(id);
-    
+            if(cityToDisable != undefined){
+              cityRepository.remove(cityToDisable);
+            }
+              
             httpResponse.errorNotFoundID('City', id)
             return httpResponse;
         }
