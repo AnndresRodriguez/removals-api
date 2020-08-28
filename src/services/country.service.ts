@@ -34,6 +34,10 @@ class CountryService {
             
             const countryRepository = getRepository(Country);
             const countrytoDelete = await countryRepository.findOne(id);
+            if(countrytoDelete != undefined){
+              countryRepository.remove(countrytoDelete);
+            }
+
     
             httpResponse.errorNotFoundID('Service', id)
             return httpResponse;
