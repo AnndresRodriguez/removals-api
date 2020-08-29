@@ -104,6 +104,10 @@ class QuotationService {
 
     if(!_.isNaN(idQuotation)){
       const quotationRepository = getRepository(Quotation);
+      const quotationToDelete = await quotationRepository.findOne(idQuotation);
+      if(quotationToDelete != undefined){
+        quotationRepository.remove(quotationToDelete);
+      }
     }
 
     httpResponse.errorFormatInvalid(idQuotation);
