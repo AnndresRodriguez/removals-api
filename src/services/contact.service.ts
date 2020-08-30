@@ -69,6 +69,23 @@ class ContactService {
     return httpResponse;
   }
 
+  async deleteContact(idContact: number){
+
+    const httpResponse = new HttpResponse();
+    if(!_.isNaN(idContact)){
+      const contactRepository = getRepository(Contact);
+      const contactToDelete= await contactRepository.findOne(idContact);
+      if(contactToDelete!== undefined){
+          contactRepository.remove(contactToDelete);
+      }
+      httpResponse.errorNotFoundID('Contact', idContact);
+      return httpResponse;
+    }
+    httpResponse.errorFormatInvalid(idContact);
+    return httpResponse;
+
+  }
+
 }
 
 const contactService = new ContactService();
