@@ -119,6 +119,11 @@ class QuotationService {
          httpResponse.delete('Quotation', quotationToDelete);
          return httpResponse;
       }
+
+      httpResponse.errorNotFoundID('Quotation', idQuotation);
+      return httpResponse;
+
+
     }
 
     httpResponse.errorFormatInvalid(idQuotation);
