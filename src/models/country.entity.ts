@@ -22,5 +22,12 @@ export class Country extends BaseEntity{
     @Column({type: 'datetime', name: 'updated_at', nullable: true })
     updatedAt: Date
 
+    static findCityByID(id: number){
+        return this.createQueryBuilder("country")
+        .innerJoinAndSelect('country.city', 'city')
+        .where("country.id = :id", { id })
+        .getOne();
+     }
+
 
 }

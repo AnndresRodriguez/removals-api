@@ -35,14 +35,17 @@ export class Quotation extends BaseEntity {
   services: ServiceEntity[];
 
   @Column({type: 'datetime', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
-    createdAt: Date
-    @Column({type: 'datetime', name: 'updated_at', nullable: true })
-    updatedAt: Date
+  createdAt: Date
+  @Column({type: 'datetime', name: 'updated_at', nullable: true })
+  updatedAt: Date
 
    static findQuotationByID(id: number){
       return this.createQueryBuilder("quotation")
+      .innerJoinAndSelect('quotation.origin', 'origin')
+      .innerJoinAndSelect('quotation.destination', 'destination')
       .innerJoinAndSelect("quotation.services", "service")
       .where("quotation.id = :id", { id })
       .getOne();
    }
+
 }

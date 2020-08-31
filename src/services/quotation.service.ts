@@ -6,6 +6,7 @@ import cityService from "./city.service";
 import countryService from "./country.service";
 import { sendMail } from "../libs/mail";
 import { HttpResponse } from '../libs/httpResponse';
+import { Country } from '../models/country.entity';
 
 class QuotationService {
   async getAllQuotations() {
@@ -82,11 +83,19 @@ class QuotationService {
       const quotation = await Quotation.findQuotationByID(idQuotation);
 
       if(quotation !== undefined){
-        const { id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt } = quotation;
-        console.log(origin);
-        console.log(destination);
-        httpResponse.findOne({ id, name_user, mail_user, phone_user, origin, destination, services, description, createdAt });
-        return httpResponse;
+        const { id, name_user, mail_user, phone_user, services, description, createdAt } = quotation;
+
+        const { origin, destination } = quotation;
+        
+        const cityOrigin = await Country.findCityByID(origin.id);
+        const cityDestination = await Country.findCityByID(destination.id);
+
+        if (cityOrigin != undefined && cityDestination != undefined) {
+
+          httpResponse.findOne({ id, name_user, mail_user, phone_user, services, countryOrigin: cityOrigin, countryDestination: cityDestination, description, createdAt });
+          return httpResponse;
+        }
+
       }
 
       httpResponse.errorNotFoundID('Quotation', idQuotation);
