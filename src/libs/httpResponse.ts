@@ -24,6 +24,13 @@ export class HttpResponse {
     this.data = dataCreated;
   }
 
+  delete(nameEntity: string, dataCreated: object){
+    this.operation = true;
+    this.message = `${nameEntity} deleted successfully`;
+    this.data = dataCreated;
+
+  }
+
   findOne(dataFinded: object){
     this.operation = true;
     this.message = `Record Found`;

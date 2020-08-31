@@ -48,4 +48,14 @@ export class Quotation extends BaseEntity {
       .getOne();
    }
 
+   static deleteQuotationByID(id: number){
+      return this.createQueryBuilder("quotation")
+      .innerJoinAndSelect('quotation.origin', 'origin')
+      .innerJoinAndSelect('quotation.destination', 'destination')
+      .innerJoinAndSelect("quotation.services", "service")
+      .delete()
+      .where("quotation.id = :id", { id })
+      .execute();
+   }
+
 }

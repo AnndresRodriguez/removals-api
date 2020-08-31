@@ -27,7 +27,18 @@ export class Country extends BaseEntity{
         .innerJoinAndSelect('country.city', 'city')
         .where("country.id = :id", { id })
         .getOne();
-     }
+    }
+
+    static deleteCityByID(id: number){
+
+        return this.createQueryBuilder("country")
+        .innerJoinAndSelect('country.city', 'city')
+        .delete()
+        .where("country.id = :id", { id })
+        .execute();
+
+    }
+
 
 
 }

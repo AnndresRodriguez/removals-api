@@ -51,9 +51,18 @@ class QuotationController {
 
   }
 
-   async updateQuotation(req: Request, res: Response) {}
+   async updateQuotation(req: Request, res: Response) {
 
-   async deleteQuotation(req: Request, res: Response) {}
+   }
+
+   async deleteQuotation(req: Request, res: Response) {
+
+    const { operation, data, message } = await quotationService.deleteQuotation(parseInt(req.params.id))
+    operation
+        ? res.status(200).json({ operation, message, data })
+        : res.status(202).json({ operation, message });
+
+   }
 
   routes() {
     this.router.get("/", this.getAllQuotations);
@@ -61,7 +70,7 @@ class QuotationController {
     this.router.post("/", this.createQuotation);
     this.router.put("/:id", this.updateStatusQuotation);
     // this.router.put("/", this.updateQuotation);
-    // this.router.delete("/:id", this.deleteQuotation);
+    this.router.delete("/:id", this.deleteQuotation);
   }
 }
 

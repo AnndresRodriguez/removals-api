@@ -67,7 +67,7 @@ class QuotationService {
         httpResponse.create('Quotation', { id, status });
         return httpResponse;
       }
-      httpResponse.errorNotFoundID('Quotation',idQuotation);
+      httpResponse.errorNotFoundID('Quotation', idQuotation);
       return httpResponse;
     }
     httpResponse.errorFormatInvalid(idQuotation);
@@ -115,7 +115,9 @@ class QuotationService {
       const quotationRepository = getRepository(Quotation);
       const quotationToDelete = await quotationRepository.findOne(idQuotation);
       if(quotationToDelete != undefined){
-        quotationRepository.remove(quotationToDelete);
+         quotationRepository.remove(quotationToDelete);
+         httpResponse.delete('Quotation', quotationToDelete);
+         return httpResponse;
       }
     }
 
