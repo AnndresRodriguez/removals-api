@@ -50,6 +50,15 @@ class ContactController {
 
   }
 
+  async deleteContact(req: Request, res: Response){
+
+    const { data, message, operation } = await contactService.deleteContact(parseInt(req.params.id));
+    operation
+      ? res.status(200).json({ operation, message, data })
+      : res.status(202).json({ operation, message });
+
+  }
+
  
   routes() {
     this.router.get("/", this.getAllContacts);
@@ -58,7 +67,7 @@ class ContactController {
     this.router.post("upload",  multer.single('document'));
     this.router.put("/:id", this.updateStatusContact);
     // this.router.put("/", this.updateContact);
-    // this.router.delete("/:id", this.deleteContact);
+    this.router.delete("/:id", this.deleteContact);
   }
 }
 
