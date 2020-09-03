@@ -19,6 +19,10 @@ class CountryController {
 
    async deleteCountry(req: Request, res: Response){
 
+      const { data, message, operation } = await countryService.deleteCountry(parseInt(req.params.id));
+      operation
+      ? res.status(200).json({ operation, message, data })
+      : res.status(202).json({ operation, message });
 
    }
 
