@@ -108,9 +108,14 @@ class Service {
             
             const serviceRepository = getRepository(ServiceEntity);
             const servicetoDelete = await serviceRepository.findOne(id);
-    
-            httpResponse.errorNotFoundID('Service', id)
-            return httpResponse;
+            if(servicetoDelete !== undefined){
+                serviceRepository.remove(servicetoDelete);
+                httpResponse.delete('Service', servicetoDelete);
+                return httpResponse;
+            }
+            
+             httpResponse.errorNotFoundID('Service', id)
+             return httpResponse;
         }
 
         httpResponse.errorFormatInvalid(id);

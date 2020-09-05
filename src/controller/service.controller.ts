@@ -56,7 +56,9 @@ class ServiceController {
       : res.status(202).json({ operation, message });
 
   }
-  async deleteService(req: Request, res: Response) {}
+  async deleteService(req: Request, res: Response) {
+    
+  }
 
   routes() {
     this.router.get("/", this.getAllServices);
