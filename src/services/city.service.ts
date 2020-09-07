@@ -37,7 +37,28 @@ class CityService {
         httpResponse.errorFormatInvalid(id);
         return httpResponse;
 
+  }
+
+  async updateCity(id: number, newDataCity: object ){
+
+    const httpResponse = new HttpResponse();
+
+    if(!_.isNaN(id)){
+            
+            const cityRepository = getRepository(City);
+            const cityToUpdate = await cityRepository.findOne(id);
+            if(cityToDisable != undefined){
+                
+            }
+              
+            httpResponse.errorNotFoundID('City', id)
+            return httpResponse;
     }
+
+    httpResponse.errorFormatInvalid(id);
+    return httpResponse;
+
+  }
 
 }
 
