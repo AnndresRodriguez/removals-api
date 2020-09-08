@@ -48,6 +48,31 @@ class CountryService {
     
   }
 
+  async updateCountry(id: number, dataNewCountry: object){
+
+    const httpResponse = new HttpResponse();
+
+    if(!_.isNaN(id)){
+            
+            const countryRepository = getRepository(Country);
+            const countryToUpdate = await countryRepository.findOne(id);
+            if(countryToUpdate != undefined){
+
+                
+                
+            }
+              
+            httpResponse.errorNotFoundID('City', id)
+            return httpResponse;
+    }
+
+    httpResponse.errorFormatInvalid(id);
+    return httpResponse;
+
+
+
+  }
+
 }
 
 const countryService = new CountryService();

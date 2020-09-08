@@ -47,7 +47,9 @@ class CityService {
             
             const cityRepository = getRepository(City);
             const cityToUpdate = await cityRepository.findOne(id);
-            if(cityToDisable != undefined){
+            if(cityToUpdate != undefined){
+
+                
                 
             }
               
