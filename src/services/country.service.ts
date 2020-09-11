@@ -5,6 +5,7 @@ import { City } from '../models/city.entity';
 import fp from 'lodash/fp';
 import _ from 'lodash';
 import { HttpResponse } from '../libs/httpResponse';
+import { ICountry } from '../models/interfaces/ICountry';
 
 class CountryService {
 
@@ -48,7 +49,7 @@ class CountryService {
     
   }
 
-  async updateCountry(id: number, dataNewCountry: object){
+  async updateCountry(id: number, dataNewCountry: ICountry){
 
     const httpResponse = new HttpResponse();
 
@@ -56,11 +57,16 @@ class CountryService {
             
             const countryRepository = getRepository(Country);
             const countryToUpdate = await countryRepository.findOne(id);
-            if(countryToUpdate != undefined){
+            if(countryToUpdate != undefined && dataNewCountry != undefined){
 
-                
-                
+              countryToUpdate.name = dataNewCountry.name;
+              countryToUpdate.status = dataNewCountry.status;
+              let countryUpdated = await countryToUpdate.save();
+              httpResponse.update('Country', countryUpdated);
+              return httpResponse;
+      
             }
+
               
             httpResponse.errorNotFoundID('City', id)
             return httpResponse;
