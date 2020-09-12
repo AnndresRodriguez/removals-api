@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import countryService from '../services/country.service';
+import { ICountry } from '../models/interfaces/ICountry';
 class CountryController {
 
    router: Router;
@@ -20,6 +21,17 @@ class CountryController {
    async deleteCountry(req: Request, res: Response){
 
       const { data, message, operation } = await countryService.deleteCountry(parseInt(req.params.id));
+      operation
+      ? res.status(200).json({ operation, message, data })
+      : res.status(202).json({ operation, message });
+
+   }
+
+   async updateCountry(req: Request, res: Response){
+
+      const dataCountry: ICountry = req.body;   
+   
+      const { data, message, operation } = await countryService.updateCountry(parseInt(req.params.id), dataCountry);
       operation
       ? res.status(200).json({ operation, message, data })
       : res.status(202).json({ operation, message });
