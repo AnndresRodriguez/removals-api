@@ -4,6 +4,7 @@ import { ServiceEntity } from '../models/service.entity';
 import fp from 'lodash/fp';
 import _ from 'lodash';
 import { HttpResponse } from '../libs/httpResponse';
+import { ICity } from '../models/interfaces/ICity';
 
 class CityService {
   async getAllCities() {
@@ -39,7 +40,7 @@ class CityService {
 
   }
 
-  async updateCity(id: number, newDataCity: object ){
+  async updateCity(id: number, newDataCity: ICity ){
 
     const httpResponse = new HttpResponse();
 
@@ -48,8 +49,12 @@ class CityService {
             const cityRepository = getRepository(City);
             const cityToUpdate = await cityRepository.findOne(id);
             if(cityToUpdate != undefined){
-
-                
+ 
+                cityToUpdate.status = newDataCity.status;
+                cityToUpdate.name = newDataCity.name;
+                const cityUpdated = await cityToUpdate.save();
+                httpResponse.update('City', cityUpdated);
+                return httpResponse;
                 
             }
               
