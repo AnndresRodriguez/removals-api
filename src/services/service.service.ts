@@ -3,6 +3,7 @@ import { ServiceEntity } from '../models/service.entity';
 import fp from 'lodash/fp';
 import _ from 'lodash';
 import { HttpResponse } from '../libs/httpResponse';
+import { IService } from '../models/interfaces/IService';
 
 
 class Service {
@@ -121,6 +122,24 @@ class Service {
         httpResponse.errorFormatInvalid(id);
         return httpResponse;
 
+
+    }
+
+    async editService(id: number, dataService: IService){
+
+        const httpResponse = new HttpResponse();
+
+        if(!_.isNaN(id)){
+            
+            const serviceRepository = getRepository(ServiceEntity);
+            const servicetoDelete = await serviceRepository.findOne(id);
+            if(servicetoDelete !== undefined){
+                
+            }
+            
+             httpResponse.errorNotFoundID('Service', id)
+             return httpResponse;
+        }
 
     }
 
