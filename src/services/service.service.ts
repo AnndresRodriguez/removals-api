@@ -132,14 +132,22 @@ class Service {
         if(!_.isNaN(id)){
             
             const serviceRepository = getRepository(ServiceEntity);
-            const servicetoDelete = await serviceRepository.findOne(id);
-            if(servicetoDelete !== undefined){
-                
+            const servicetoEdit = await serviceRepository.findOne(id);
+            if(servicetoEdit !== undefined){
+
+                servicetoEdit.name = dataService.name;
+                servicetoEdit.status = dataService.status;
+                const serviceUpdated = await servicetoEdit.save();
+                httpResponse.update('Service', serviceUpdated);
+                return httpResponse;
             }
             
              httpResponse.errorNotFoundID('Service', id)
              return httpResponse;
         }
+
+        httpResponse.errorFormatInvalid(id);
+        return httpResponse;
 
     }
 
