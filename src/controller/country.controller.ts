@@ -43,7 +43,7 @@ class CountryController {
 
     // this.router.get("/:id", this.getCountry);
     // this.router.post("/", this.createCountry);
-    // this.router.put("/", this.updateCountry);
+    this.router.put("/", this.updateCountry);
     // this.router.put("/:id", this.updateStatusCountry);
    this.router.delete("/:id", this.deleteCountry);
   }
