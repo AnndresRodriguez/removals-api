@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
-import countryService from '../services/country.service';
-import { ICountry } from '../models/interfaces/ICountry';
+import cityService from '../services/city.service';
+import { ICity } from '../models/interfaces/ICity';
 class CityController {
 
    router: Router;
@@ -13,8 +13,7 @@ class CityController {
 
    async getAllCities(req: Request, res: Response){
 
-      const allCountries = await countryService.getAllCountries();
-      res.json(allCountries);
+      
       
    }
 
@@ -32,12 +31,11 @@ class CityController {
 
    routes() {
     this.router.get("/", this.getAllCities);
-
     // this.router.get("/:id", this.getCity);
     // this.router.post("/", this.createCity);
     this.router.put("/", this.updateCity);
     // this.router.put("/:id", this.updateStatusCity);
-   this.router.delete("/:id", this.deleteCity);
+    this.router.delete("/:id", this.deleteCity);
   }
 
 }
