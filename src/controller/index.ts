@@ -4,6 +4,7 @@ import quotationContoller from "./quotation.controller";
 import serviceController from "./service.controller";
 import countryController from "./country.controller";
 import contactController from './contact.controller';
+import cityController from './city.controller';
 
 const routes = {
   userController,
@@ -11,6 +12,7 @@ const routes = {
   quotationContoller,
   serviceController,
   countryController,
-  contactController
+  contactController,
+  cityController
 };
 export default routes;
