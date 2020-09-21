@@ -15,10 +15,16 @@ class CityService {
 
   async createCity(name: string) {
     const httpResponse = new HttpResponse();
-    const cityRepository = getRepository(City);
-    const newCity = cityRepository.create({ name });
-    const cityCreated =  await newCity.save();
-    httpResponse.create('City', cityCreated);
+    
+    if(!_.isEmpty(name)){
+      const cityRepository = getRepository(City);
+      const newCity = cityRepository.create({ name });
+      const cityCreated =  await newCity.save();
+      httpResponse.create('City', cityCreated);
+      return httpResponse;
+    }
+
+    httpResponse.errorEmptyObject({name})
     return httpResponse;
   }
 
