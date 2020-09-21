@@ -14,9 +14,12 @@ class CityService {
   }
 
   async createCity(name: string) {
+    const httpResponse = new HttpResponse();
     const cityRepository = getRepository(City);
     const newCity = cityRepository.create({ name });
-    return await newCity.save();
+    const cityCreated =  await newCity.save();
+    httpResponse.create('City', cityCreated);
+    return httpResponse;
   }
 
   async disableCity( id: number ){
