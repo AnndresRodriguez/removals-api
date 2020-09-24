@@ -44,7 +44,7 @@ class CityController {
     this.router.get("/", this.getAllCities);
     // this.router.get("/:id", this.getCity);
     this.router.post("/", this.createCity);
-    this.router.put("/", this.updateCity);
+    // this.router.put("/", this.updateCity);
     // this.router.put("/:id", this.updateStatusCity);
     this.router.delete("/:id", this.deleteCity);
   }
