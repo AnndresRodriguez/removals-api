@@ -12,7 +12,10 @@ class CityController {
    }
 
    async getAllCities(req: Request, res: Response){
-      
+
+     const allCities = await cityService.getAllCities();
+     res.status(200).json(allCities);
+ 
    }
 
    async createCity(req: Request, res: Response){
@@ -36,8 +39,12 @@ class CityController {
 
    async updateCity(req: Request, res: Response){
 
+     const dataNewCity: ICity = req.body;
+     const { operation, message, data } =  await cityService.updateCity(parseInt(req.params.id), dataNewCity);
+    operation
+     ? res.status(200).json({ operation, message, data })
+     : res.status(202).json({ operation, message });
    
-
    }
 
    routes() {
