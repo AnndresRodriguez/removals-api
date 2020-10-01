@@ -39,10 +39,19 @@ class CountryService {
 
   async createCountry(name: string, city: City) {
 
-    const CountryRepository = getRepository(Country);
-    const newCountry = CountryRepository.create({ name });
-    newCountry.city = city;
-    return await newCountry.save();
+    const httpResponse = new HttpResponse();
+
+    if(name != "" && !_.isEmpty(city)){
+
+      const CountryRepository = getRepository(Country);
+      const newCountry = CountryRepository.create({ name });
+      newCountry.city = city;
+      return await newCountry.save();
+    }
+
+    httpResponse.errorEmptyObject({ name, city })
+    return httpResponse;
+    
     
   }
 
