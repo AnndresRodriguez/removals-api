@@ -8,9 +8,11 @@ import { ICity } from "../models/interfaces/ICity";
 
 class CityService {
   async getAllCities() {
-    const cityRepository = getRepository(City);
+    const httpResponse = new HttpResponse();
+    const cityRepository =  getRepository(City);
     const allCities = await cityRepository.find();
-    return allCities;
+    httpResponse.findAll(allCities);
+    return httpResponse;
   }
 
   async getCity(id: number) {

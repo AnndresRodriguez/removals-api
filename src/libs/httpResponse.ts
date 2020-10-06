@@ -38,6 +38,13 @@ export class HttpResponse {
 
   }
 
+  findAll(allRecords: any){
+    this.operation = true;
+    this.message = `All Records Found`;
+    this.data = allRecords;
+
+  }
+
   errorDuplicated() {
     this.message = "This record is already in our database";
   }
