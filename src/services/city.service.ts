@@ -11,7 +11,12 @@ class CityService {
     const httpResponse = new HttpResponse();
     const cityRepository =  getRepository(City);
     const allCities = await cityRepository.find();
-    httpResponse.findAll(allCities);
+    if(!_.isEmpty(allCities)){
+        httpResponse.findAll(allCities);
+        return httpResponse;
+    }
+
+    httpResponse.emptyRecords();
     return httpResponse;
   }
 

@@ -45,6 +45,11 @@ export class HttpResponse {
 
   }
 
+  emptyRecords() {
+    this.message = "Not records found";
+    this.data = [];
+  }
+
   errorDuplicated() {
     this.message = "This record is already in our database";
   }
