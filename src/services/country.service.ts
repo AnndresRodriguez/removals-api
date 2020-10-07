@@ -12,9 +12,17 @@ class CountryService {
 
   async getAllCountries() {
 
+    const httpResponse = new HttpResponse();
     const countryRepository = getRepository(Country);
     const allCountries = await countryRepository.find();
-    return allCountries;
+
+    if(!_.isEmpty(allCountries)){
+        httpResponse.findAll(allCountries);
+        return httpResponse;
+    }
+
+    httpResponse.emptyRecords();
+    return httpResponse;
 
   }
 
