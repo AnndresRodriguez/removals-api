@@ -10,9 +10,17 @@ class ContactService {
 
   async getAllContacts() {
 
+    const httpResponse = new HttpResponse();
     const contactRepository = getRepository(Contact);
     const allContacts = await contactRepository.find();
-    return allContacts;
+
+    if(!_.isEmpty(allCountries)){
+        httpResponse.findAll(allContacts);
+        return httpResponse;
+    }
+
+    httpResponse.emptyRecords();
+    return httpResponse;
 
   }
 
