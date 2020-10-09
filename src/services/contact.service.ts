@@ -14,7 +14,7 @@ class ContactService {
     const contactRepository = getRepository(Contact);
     const allContacts = await contactRepository.find();
 
-    if(!_.isEmpty(allCountries)){
+    if(!_.isEmpty(allContacts)){
         httpResponse.findAll(allContacts);
         return httpResponse;
     }
