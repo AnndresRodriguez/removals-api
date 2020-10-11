@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import service from "../services/service.service";
-// import { ServiceService } from '../services';
+
 import { validateRequest } from '../libs/tools';
 
 class ServiceController {
@@ -12,8 +12,11 @@ class ServiceController {
   }
 
   async getAllServices(req: Request, res: Response) {
-    const allServices = await service.getAllServices();
-    res.json(allServices);
+    const { operation, message, data }  = await service.getAllServices();
+    operation
+        ? res.status(200).json({ operation, message, data })
+        : res.status(202).json({ operation, message });
+    
   }
 
   async getService(req: Request, res: Response) {}
