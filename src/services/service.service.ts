@@ -11,9 +11,17 @@ class Service {
     
     async getAllServices(){
 
+      const httpResponse = new HttpResponse();
       const serviceRepository = getRepository(ServiceEntity);
       const services = serviceRepository.find();
-      return services; 
+
+      if(!_.isEmpty(services)){
+        httpResponse.findAll(services);
+        return httpResponse;
+      }
+
+      httpResponse.emptyRecords();
+      return httpResponse;
       
     }
 
