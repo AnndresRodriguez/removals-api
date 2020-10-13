@@ -8,12 +8,19 @@ import { sendMail } from "../libs/mail";
 import { HttpResponse } from '../libs/httpResponse';
 import { Country } from '../models/country.entity';
 
+
 class QuotationService {
   async getAllQuotations() {
+    const httpResponse = new HttpResponse();
     const quotations = await getRepository(Quotation)
     .createQueryBuilder("quotation")
     .innerJoinAndSelect("quotation.services", "service")
     .getMany();
+
+    if(!_.isEmpty(quotations)){
+      httpResponse.findAll(quotations);
+      return httpResponse;
+    }
 
     return quotations;    
 
