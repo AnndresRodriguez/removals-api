@@ -22,7 +22,8 @@ class QuotationService {
       return httpResponse;
     }
 
-    return quotations;    
+    httpResponse.emptyRecords();
+    return httpResponse;    
 
   }
 

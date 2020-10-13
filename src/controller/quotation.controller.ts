@@ -14,8 +14,10 @@ class QuotationController {
   }
 
   async getAllQuotations(req: Request, res: Response) {
-    const allQuotations  = await quotationService.getAllQuotations();
-    res.json(allQuotations);
+    const { operation, data, message } = await quotationService.getAllQuotations();
+    operation
+        ? res.status(200).json({ operation, message, data })
+        : res.status(202).json({ operation, message });
   }
 
   async getQuotation(req: Request, res: Response) {
